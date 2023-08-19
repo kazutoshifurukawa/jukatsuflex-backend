@@ -1,0 +1,25 @@
+digraph jukatsu {
+    // basic settings
+    graph [rankdir=LR];
+    node [shape=record, fontsize=12, width=3.0];
+    edge [arrowhead=crow, fontsize=12];
+
+    // nodes
+    user [label="ユーザー(user)|{{id|password|name|skills|house_id}|{Int|String|String|Array|Int}}"];
+    house [label="家(house)|{{id|name|address|fix_parts}|{Int|String|String|Array}}"];
+    fix_part [label="修繕部位データ(fix_part)|{{id|room_type_id|estimate_fix_time|movie_id}|{Int|Int|Int(時間)|Int}}"];
+    room_type [label="Room Type(room_type)|{{id|name}|{Int|String}}"];
+    skill [label="スキル(skill)|{{id|name}|{Int|String}}"];
+    movie [label="修繕動画(movie)|{{id|name|url|tools|skills|estimated_time|learning_time}|{Int|String|String|Array|Array|Int(時間)|Int(時間)}}"];
+    tool [label="道具(tool)|{{id|name}|{Int|String}}"];
+    partner [label="修繕業者情報(partner)|{{id|company_name|contact_parson|company_address|tel_numbe|acceptable_area}|{Int|String|String|String|String|Polygon}}"];
+
+    // edges
+    user -> house [label="1:N"];
+    user -> skill [label="N:N"];
+    house -> fix_part [label="N:N"];
+    fix_part -> room_type [label="1:N"];
+    fix_part -> movie [label="1:N"];
+    movie -> tool [label="N:N"];
+    movie -> skill [label="N:N"];
+}
