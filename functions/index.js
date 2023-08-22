@@ -19,6 +19,28 @@ admin.initializeApp(functions.config().firebase);
 // データベースの参照を取得する
 const fireStore = admin.firestore();
 
+exports.estimate = functions.https.onRequest((req, res) => {
+  // パラメータを取得
+  const params = req.body;
+  const collRef = fireStore.collection('fix_part');
+  const fixpart = params.fixpart.split(',');
+
+  for( let i = 0 ; i < fixpart.length; i++) {
+    collRef.doc(fixpart[i]).get().then((doc) => {
+      if (doc.exists) {
+//        res.status(200).send(doc.data());
+          console.log( doc.data());
+      } else {
+//        res.status(200).send("error 200:document not found");
+          console.log( "data not found");
+      }
+    });
+  };
+
+  res.status(200);
+
+});
+
 exports.getFirestore = functions.https.onRequest((req, res) => {
   // パラメータを取得
   const params = req.body;
