@@ -25,11 +25,21 @@ exports.estimate = functions.https.onRequest((req, res) => {
   const collRef = fireStore.collection('fix_part');
   const fixpart = params.fixpart.split(',');
 
+  var fix_days = 0;
+  var price = 0;
+  var urls = [];
+
   for( let i = 0 ; i < fixpart.length; i++) {
     collRef.doc(fixpart[i]).get().then((doc) => {
+      console.log( "loop " + i )
       if (doc.exists) {
-//        res.status(200).send(doc.data());
-          console.log( doc.data());
+          fix_days += Number(doc.get("estimate_fix_time"));
+          console.log( doc.get("estimate_fix_time") );
+          console.log( fix_days);
+
+          price += doc.get("estimate_price");
+          urls.push( doc.get("youtube_URL"));
+          console.log( doc.get("youtube_URL") );
       } else {
 //        res.status(200).send("error 200:document not found");
           console.log( "data not found");
@@ -37,7 +47,10 @@ exports.estimate = functions.https.onRequest((req, res) => {
     });
   };
 
-  res.status(200);
+  console.log( fix_days );
+  console.log( price );
+  console.log( urls );
+  res.status(200); // fix_days, price, urls[]を返却するコードを書く
 
 });
 
