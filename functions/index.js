@@ -19,7 +19,7 @@ admin.initializeApp(functions.config().firebase);
 // データベースの参照を取得する
 const fireStore = admin.firestore();
 
-exports.estimate = functions.https.onRequest((req, res) => {
+exports.estimate = onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
   const collRef = fireStore.collection('fix_part');
@@ -50,7 +50,7 @@ exports.estimate = functions.https.onRequest((req, res) => {
   console.log( fix_days );
   console.log( price );
   console.log( urls );
-  res.status(200); // fix_days, price, urls[]を返却するコードを書く
+  res.json({fix_days: fix_days, price: price, urls: urls}) // fix_days, price, urls[]を返却するコードを書く
 
 });
 
