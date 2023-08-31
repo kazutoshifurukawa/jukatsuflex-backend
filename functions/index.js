@@ -10,19 +10,12 @@
 const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 
-const functions = require('firebase-functions');
-const admin = require("firebase-admin");
-
 // The Firebase Admin SDK to access Firestore.
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
 
+// FIrebaseの初期化
 initializeApp();
-
-// Admin SDKでfireStoreを使う
-//admin.initializeApp(functions.config().firebase);
-// データベースの参照を取得する
-//const fireStore = admin.firestore();
 
 exports.estimate = onRequest(async (req, res) => {
   // パラメータを取得
@@ -35,7 +28,7 @@ exports.estimate = onRequest(async (req, res) => {
   var urls = [];
 
   for( let i = 0 ; i < fixpart.length; i++) {
-    const doc = await collRef.doc(fixpart[i]).get()
+    const doc = await collRef.doc(fixpart[i]).get();
     console.log( "loop " + i )
     if (doc.exists) {
       fix_days += Number(doc.get("estimate_fix_time"));
@@ -54,11 +47,11 @@ exports.estimate = onRequest(async (req, res) => {
   console.log( fix_days );
   console.log( price );
   console.log( urls );
-  await res.json({fix_days: fix_days, price: price, urls: urls}) // fix_days, price, urls[]を返却するコードを書く
+  res.json({fix_days: fix_days, price: price, urls: urls});
 
 });
 
-exports.getFirestore = functions.https.onRequest((req, res) => {
+exports.getFirestore = onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
   // パラメータから任意のdocument IDを取得する
@@ -66,14 +59,13 @@ exports.getFirestore = functions.https.onRequest((req, res) => {
 
   if (documentId) {
     // 'test'というcollectionの中の任意のdocumentに格納されているデータを取得する
-    const testRef = fireStore.collection('test');
-    testRef.doc(documentId).get().then((doc) => {
-      if (doc.exists) {
-        res.status(200).send(doc.data());
-      } else {
-        res.status(200).send("error 200:document not found");
-      }
-    });
+    const testRef = getFirestore().collection('test');
+    const doc = await testRef.doc(documentId).get()
+    if (doc.exists) {
+      res.status(200).send(doc.data());
+    } else {
+      res.status(200).send("error 200:document not found");
+    }
   } else {
     res.status(400).send({errorMessaage: 'error 400:document id not found'});
   }
@@ -89,15 +81,15 @@ const validateParamsSchema = (params) => {
 };
 
 // firestoreに任意のデータを保存する
-exports.saveFirestore = functions.https.onRequest((req, res) => {
+exports.saveFirestore = onRequest(async (req, res) => {
   const params = req.body;
   // パラメータのスキーマのチェック
   if (!validateParamsSchema(params)) {
     res.status(400).send({errorMessaage: 'パラメータが不正です'});
   } else {
-    const db = fireStore;
+    const db = getFirestore();
     // 'test'というcollectionがある前提で任意のドキュメントIDのdocumentを生成する
-    db.doc(`test/${params.documentId}`).set({
+    await db.doc(`test/${params.documentId}`).set({
       id: params.id,
       name: params.name,
     });
@@ -120,7 +112,6 @@ exports.saveFirestore = functions.https.onRequest((req, res) => {
 //   response.send("Hello from Firebase!");
 // });
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
+exports.helloWorld = onRequest(async (request, response) => {
   response.send("Hello from Firebase!!!");
-
 });
