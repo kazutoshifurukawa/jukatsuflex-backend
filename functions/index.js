@@ -17,6 +17,28 @@ const {getFirestore} = require("firebase-admin/firestore");
 // FIrebaseの初期化
 initializeApp();
 
+exports.getHouseById = onRequest(async (req, res) => {
+  // パラメータを取得
+  const params = req.body;
+  // パラメータからidを取得する
+  const id = params.id;
+  // idが無ければエラーを返す
+  if (id === undefined) {
+    res.status(400).send({errorMessaage: 'error 400:document id not found'});
+    return
+  }
+  // 'house'というcollectionの中のidのdocumentを取得する
+  const houseRef = getFirestore().collection('house').doc(id);
+  // curl -XGET -d 'id=FvViAl8JuG6pqZrnER50' http://127.0.0.1:5001/jukatsu-fcfe6/us-central1/getHouseById
+  const doc = await houseRef.get();
+  if (!doc.exists) {
+    res.status(400).send("error 400:document not found");
+    return
+  } else {
+    res.status(200).send(doc.data());
+  }
+});
+
 exports.estimate = onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
@@ -50,6 +72,29 @@ exports.estimate = onRequest(async (req, res) => {
   res.json({fix_days: fix_days, price: price, urls: urls});
 
 });
+
+exports.getFirestoreById = onRequest(async (req, res) => {
+  // パラメータを取得
+  const params = req.body;
+  // パラメータから任意のdocument IDを取得する
+  const documentId = params.documentId;
+  // パラメータから任意のcollection IDを取得する
+  const collectionId = params.collectionId;
+
+  if (documentId && collectionId) {
+    // 'test'というcollectionの中の任意のdocumentに格納されているデータを取得する
+    const testRef = getFirestore().collection(collectionId);
+    const doc = await testRef.doc(documentId).get()
+    if (doc.exists) {
+      res.status(200).send(doc.data());
+    } else {
+      res.status(200).send("error 200:document not found");
+    }
+  } else {
+    res.status(400).send({errorMessaage: 'error 400:document id not found'});
+  }
+});
+
 
 exports.getFirestore = onRequest(async (req, res) => {
   // パラメータを取得
