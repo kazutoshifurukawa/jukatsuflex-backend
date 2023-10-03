@@ -13,11 +13,12 @@ const logger = require("firebase-functions/logger");
 // The Firebase Admin SDK to access Firestore.
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
+const functions = require('firebase-functions');
 
 // FIrebaseの初期化
 initializeApp();
 
-exports.getHouseById = onRequest(async (req, res) => {
+exports.getHouseById = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
   // パラメータからidを取得する
@@ -39,7 +40,7 @@ exports.getHouseById = onRequest(async (req, res) => {
   }
 });
 
-exports.estimate = onRequest(async (req, res) => {
+exports.estimate = functions.region('asia-northeast1').https.onRequest(async (req, res)=> {
   // パラメータを取得
   const params = req.body;
   const collRef = getFirestore().collection('fix_part');
@@ -73,7 +74,7 @@ exports.estimate = onRequest(async (req, res) => {
 
 });
 
-exports.getFirestoreById = onRequest(async (req, res) => {
+exports.getFirestoreById = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
   // パラメータから任意のdocument IDを取得する
@@ -96,7 +97,7 @@ exports.getFirestoreById = onRequest(async (req, res) => {
 });
 
 
-exports.getFirestore = onRequest(async (req, res) => {
+exports.getFirestore = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
   // パラメータから任意のdocument IDを取得する
@@ -126,7 +127,7 @@ const validateParamsSchema = (params) => {
 };
 
 // firestoreに任意のデータを保存する
-exports.saveFirestore = onRequest(async (req, res) => {
+exports.saveFirestore = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
   const params = req.body;
   // パラメータのスキーマのチェック
   if (!validateParamsSchema(params)) {
@@ -157,6 +158,6 @@ exports.saveFirestore = onRequest(async (req, res) => {
 //   response.send("Hello from Firebase!");
 // });
 
-exports.helloWorld = onRequest(async (request, response) => {
+exports.helloWorld = functions.region('asia-northeast1').https.onRequest(async (request, response) => {
   response.send("Hello from Firebase!!!");
 });
