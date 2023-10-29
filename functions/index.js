@@ -74,6 +74,33 @@ exports.estimate = functions.region('asia-northeast1').https.onRequest(async (re
 
 });
 
+exports.est = functions.region('asia-northeast1').https.onRequest(async (req, res)=> {
+  // パラメータを取得
+  const params = req.body;
+//  const collRef = getFirestore().collection('fix_part');
+//  const args = params.fixpart.split(',');
+
+  const data =  {
+        "fix_part":"999",
+        "fix_part_name":"abcdef",
+        "urls": "[http://aaaa, http://bbbb]",
+        "tools":"[abcdef, ghijk]",
+        "estimated_fix_time":"999",
+        "estimated_learning_time":"999",
+        "price":"999999",
+        "skills":"[abcdef, ghijk]",
+        "partner_company_name":"abcdef",
+        "partner_telnumber":"abcdef"
+    };
+
+  // JSON形式のデータに変換する
+  json_data = JSON.stringify(data);
+
+  console.log( json_data );
+  res.send( json_data )
+
+});
+
 exports.getFirestoreById = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
   // パラメータを取得
   const params = req.body;
@@ -95,7 +122,6 @@ exports.getFirestoreById = functions.region('asia-northeast1').https.onRequest(a
     res.status(400).send({errorMessaage: 'error 400:document id not found'});
   }
 });
-
 
 exports.getFirestore = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
   // パラメータを取得
