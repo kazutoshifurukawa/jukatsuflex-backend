@@ -83,12 +83,12 @@ exports.est = functions.region('asia-northeast1').https.onRequest(async (req, re
   const data =  {
         "fix_part":"999",
         "fix_part_name":"abcdef",
-        "urls": "[http://aaaa, http://bbbb]",
-        "tools":"[abcdef, ghijk]",
+        "urls": ["http://aaaa, http://bbbb"],
+        "tools":["abcdef", "ghijk"],
         "estimated_fix_time":"999",
         "estimated_learning_time":"999",
         "price":"999999",
-        "skills":"[abcdef, ghijk]",
+        "skills":["abcdef", "ghijk"],
         "partner_company_name":"abcdef",
         "partner_telnumber":"abcdef"
     };
