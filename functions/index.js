@@ -81,7 +81,34 @@ exports.est = functions.region('asia-northeast1').https.onRequest(async (req, re
 //  const args = params.fixpart.split(',');
 
   const data =  {
-        "fix_part":"999",
+        "id":"1",
+        "fix_part":"111",
+        "fix_part_name":"abcdef",
+        "urls": ["http://aaaa" , "http://bbbb"],
+        "tools":["abcdef", "ghijk"],
+        "estimated_fix_time":"999",
+        "estimated_learning_time":"999",
+        "price":"999999",
+        "skills":["abcdef", "ghijk"],
+        "partner_company_name":"abcdef",
+        "partner_telnumber":"abcdef"
+      };
+  const data2 =  {
+        "id":"2",
+        "fix_part":"222",
+        "fix_part_name":"abcdef",
+        "urls": ["http://aaaa" , "http://bbbb"],
+        "tools":["abcdef", "ghijk"],
+        "estimated_fix_time":"999",
+        "estimated_learning_time":"999",
+        "price":"999999",
+        "skills":["abcdef", "ghijk"],
+        "partner_company_name":"abcdef",
+        "partner_telnumber":"abcdef"
+      };
+  const data3 =  {
+        "id":"3",
+        "fix_part":"333",
         "fix_part_name":"abcdef",
         "urls": ["http://aaaa" , "http://bbbb"],
         "tools":["abcdef", "ghijk"],
@@ -94,7 +121,7 @@ exports.est = functions.region('asia-northeast1').https.onRequest(async (req, re
     };
 
   // JSON形式のデータに変換する
-  json_data = JSON.stringify(data);
+  json_data = JSON.stringify([data,data2,data3]);
 
   console.log( json_data );
   res.send( json_data )
